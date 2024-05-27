@@ -1,0 +1,116 @@
+openapi: 3.0.3
+info:
+  title: InterBooks
+  version: 1.0.0
+  description: |-
+    InterBooks es una plataforma para el intercambio de libros, venta o regalos. Donde vas a poder conseguir renovar toda tu bibloteca dando aquellos libros viejos una segunda vida
+
+servers:
+  - url: http://localhost:3001
+    description: Servidor Local
+
+tags:
+  - name: Books
+    description: Books
+  - name: Users
+    description: Users
+  - home: Home
+    description: Home
+paths:
+  /api/auth/login:
+    post:
+      summary: Logs in a user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+      responses:
+        "200":
+          description: The user was successfully logged in
+          content:
+            application/json:
+              schema:
+                type: json
+                example:
+                  {
+                    "userId": "644e5sda4a9b74c54243",
+                    "jwt": "eyJhaadsciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ24544NTA0MDRlOWQ4YTRhOqwedASD3NDMiLCJpYXQiOjE3MTY0MTczNTAsImV4cCI6MTcxNjUwMzc1MH0.-M3TadDuFEEDZQMtsad56ad5321E4i3FN1mWhfS1QQdsTw",
+                  }
+        "404":
+          description: The user was not found
+        "500":
+          description: Internal server error
+  /api/user/register:
+    post:
+      summary: CRUD of users
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Register"
+      responses:
+        "201":
+          description: The user was successfully register
+          content:
+            application/json:
+              schema:
+                type: json
+                example:
+                  {
+                    "user":
+                      {
+                        "username": "Naiki",
+                        "password": "$2b$10$TxF5Q4jvB2VVmJW/yooaKupiZaCxh85On6hJGp2TTp9EnIEOlCbLS",
+                        "email": "nicolas@gmail.com",
+                        "favoriteGenres": ["fiction", "mystery"],
+                        "books": [],
+                        "pais": "Argentina",
+                        "codigoPostal": "1870",
+                        "_id": "664f54bf77e8c53de89dd719",
+                        "__v": 0,
+                      },
+                  }
+        "404":
+          description: The user was not register
+        "500":
+          description: Internal server error
+  /api/home:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Get home
+      tags: [Home]
+      description: Get home
+      responses:
+        "200":
+          description: The user was successfully logged in
+          content:
+            application/html:
+              example: home
+components:
+  schemas:
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: usuarioprueba@example.com
+        password: Usuarioprueba1!
+    Register:
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
