@@ -1,3 +1,4 @@
+const BookModel = require('../models/BooksModel')
 const booksServices = require('../services/booksServices')
 
 const addBook = async (req, res ) => {
@@ -20,8 +21,19 @@ const deleteBook = async (req, res) => {
     }
 }
 
+const getBooks = async (req, res) => {
+    try {
+        const books = await BookModel.find()
+        if(!books || books.length === 0) return res.status(404).json({message: "No books found"})
+        res.status(200).json(books)
+    }catch(e){
+        console.error(e)
+    }
+}
+
 
 module.exports = {
     addBook,
-    deleteBook
+    deleteBook,
+    getBooks
 }

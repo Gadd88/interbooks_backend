@@ -15,6 +15,7 @@ const actions = [
 router.get('/books/genres-actions', (req, res) => {
     res.json({genres: genres, actions: actions})
 })
+router.get('/books', bookController.getBooks)
 router.post('/books', passport.authenticate('jwt', { session: false }), upload.single('image'), bookController.addBook)
 router.delete('/books/:id', passport.authenticate('jwt', { session: false }), bookController.deleteBook)
 
